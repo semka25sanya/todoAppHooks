@@ -34,5 +34,3 @@ export default class TasksFilter extends Component {
         return <ul className="filters">{buttons}</ul>
     }
 }
-
-// 1

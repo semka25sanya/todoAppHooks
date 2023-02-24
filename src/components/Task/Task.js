@@ -83,5 +83,3 @@ export default class Task extends Component {
         )
     }
 }
-
-// 1
