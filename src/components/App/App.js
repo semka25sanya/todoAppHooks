@@ -9,11 +9,7 @@ export default class App extends Component {
     maxId = 1
 
     state = {
-        todoData: [
-            this.createItem('Completed task'),
-            this.createItem('Editing task'),
-            this.createItem('Active task'),
-        ],
+        todoData: [],
         filter: 'all',
     }
 
@@ -23,11 +19,7 @@ export default class App extends Component {
             const oldItem = todoData[idx]
             const newItem = { ...oldItem, edit: !oldItem.edit }
 
-            const newArr = [
-                ...todoData.slice(0, idx),
-                newItem,
-                ...todoData.slice(idx + 1),
-            ]
+            const newArr = [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)]
 
             return {
                 todoData: newArr,
@@ -45,11 +37,7 @@ export default class App extends Component {
                 edit: !oldData.edit,
                 description: event.target.querySelector('input').value,
             }
-            const newArray = [
-                ...todoData.slice(0, index),
-                newData,
-                ...todoData.slice(index + 1),
-            ]
+            const newArray = [...todoData.slice(0, index), newData, ...todoData.slice(index + 1)]
             return {
                 todoData: newArray,
             }
@@ -87,11 +75,7 @@ export default class App extends Component {
             const oldItem = todoData[idx]
             const newItem = { ...oldItem, completed: !oldItem.completed }
 
-            const newArr = [
-                ...todoData.slice(0, idx),
-                newItem,
-                ...todoData.slice(idx + 1),
-            ]
+            const newArr = [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)]
 
             return {
                 todoData: newArr,
@@ -138,14 +122,9 @@ export default class App extends Component {
     }
 
     render() {
-        const completedTaskCount = this.state.todoData.filter(
-            (el) => el.completed
-        ).length
+        const completedTaskCount = this.state.todoData.filter((el) => el.completed).length
         const uncompletedTask = this.state.todoData.length - completedTaskCount
-        const visibleItems = this.filterItems(
-            this.state.todoData,
-            this.state.filter
-        )
+        const visibleItems = this.filterItems(this.state.todoData, this.state.filter)
         return (
             <section className="todoapp">
                 <AppHeader onAddedItem={this.addItem} />

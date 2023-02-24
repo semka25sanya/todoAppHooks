@@ -1,4 +1,3 @@
-// import from "react";
 import './AppHeader.css'
 import PropTypes from 'prop-types'
 import NewTaskForm from '../NewTaskForm'

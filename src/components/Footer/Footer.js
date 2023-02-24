@@ -8,7 +8,7 @@ function Footer({ todoCount, onClear, filter, onFilterChange }) {
             <span className="todo-count">{todoCount} items left</span>
             <TasksFilter filter={filter} onFilterChange={onFilterChange} />
             <button type="button" onClick={onClear} className="clear-completed">
-                Clear completedop
+                Clear completed
             </button>
         </footer>
     )

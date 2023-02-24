@@ -29,6 +29,7 @@ export default class NewTaskForm extends Component {
         return (
             <form onSubmit={this.onSubmitDesc}>
                 <input
+                    required
                     type="text"
                     className="new-todo"
                     placeholder="What needs to be done?"
