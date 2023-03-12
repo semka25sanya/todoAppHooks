@@ -22,6 +22,8 @@ export default class Task extends Component {
     state = {
         value: this.props.description,
         currentTime: null,
+        seconds: 0,
+        minutes: 0,
     }
 
     componentDidMount() {
@@ -47,8 +49,30 @@ export default class Task extends Component {
         })
     }
 
+    startTimer = () => {
+        this.timer = setInterval(this.countUp, 1000)
+    }
+
+    stopTimer = () => {
+        clearInterval(this.timer)
+    }
+
+    countUp = () => {
+        const { seconds, minutes } = this.state
+
+        if (seconds === 60) {
+            this.setState({
+                seconds: 0,
+                minutes: minutes + 1,
+            })
+        } else {
+            this.setState({ seconds: seconds + 1 })
+        }
+    }
+
     render() {
         const { description, onDeleted, onToggleCompleted, onEdit, completed, edit, editTodoSubmit, id } = this.props
+
         return edit ? (
             <li className="editing">
                 <form onSubmit={editTodoSubmit}>
@@ -66,7 +90,26 @@ export default class Task extends Component {
                 <div className="view">
                     <input id={id} className="toggle" type="checkbox" onClick={onToggleCompleted} />
                     <label htmlFor={id}>
-                        <span className="description">{description}</span>
+                        <span className="description">
+                            {description}
+                            <button
+                                aria-label="play-button"
+                                onClick={this.startTimer}
+                                type="button"
+                                className="icon icon-play"
+                            />
+                            <button
+                                aria-label="pause-button"
+                                type="button"
+                                onClick={this.stopTimer}
+                                className="icon icon-pause"
+                            />
+                            <span className="passedTime">
+                                {' '}
+                                min:{this.state.minutes} sec: {this.state.seconds}
+                            </span>
+                        </span>
+
                         <span className="created">created {this.state.currentTime} ago</span>
                     </label>
                     <button aria-label="edit-button" type="button" className="icon icon-edit" onClick={onEdit} />
