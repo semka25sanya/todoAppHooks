@@ -9,6 +9,8 @@ export default class NewTaskForm extends Component {
 
     state = {
         description: '',
+        min: '',
+        sec: '',
     }
 
     onChangeDesc = (e) => {
@@ -17,11 +19,25 @@ export default class NewTaskForm extends Component {
         })
     }
 
+    onChangeMinTimer = (e) => {
+        this.setState({
+            min: Number(e.target.value),
+        })
+    }
+
+    onChangeSecTimer = (e) => {
+        this.setState({
+            sec: Number(e.target.value),
+        })
+    }
+
     onSubmitDesc = (e) => {
         e.preventDefault()
-        this.props.onAddedItem(this.state.description)
+        this.props.onAddedItem(this.state.description, this.state.min, this.state.sec)
         this.setState({
             description: '',
+            min: '',
+            sec: '',
         })
     }
 
@@ -37,6 +53,19 @@ export default class NewTaskForm extends Component {
                     onChange={this.onChangeDesc}
                     value={this.state.description}
                 />
+                <input
+                    className="new-todo-form__timer"
+                    onChange={this.onChangeMinTimer}
+                    placeholder="Min"
+                    value={this.state.min}
+                />
+                <input
+                    className="new-todo-form__timer"
+                    onChange={this.onChangeSecTimer}
+                    placeholder="Sec"
+                    value={this.state.sec}
+                />
+                <input type="submit" style={{ display: 'none' }} />
             </form>
         )
     }

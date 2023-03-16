@@ -44,8 +44,8 @@ export default class App extends Component {
         })
     }
 
-    addItem = (text) => {
-        const newItem = this.createItem(text)
+    addItem = (text, min, sec) => {
+        const newItem = this.createItem(text, min, sec)
 
         this.setState(({ todoData }) => {
             const newArr = [...todoData, newItem]
@@ -111,13 +111,15 @@ export default class App extends Component {
         }
     }
 
-    createItem(text) {
+    createItem(text, min, sec) {
         return {
             description: text,
             completed: false,
             id: this.maxId++,
             edit: false,
             data: new Date(),
+            min,
+            sec,
         }
     }
 

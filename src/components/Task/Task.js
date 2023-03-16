@@ -22,8 +22,9 @@ export default class Task extends Component {
     state = {
         value: this.props.description,
         currentTime: null,
-        seconds: 0,
-        minutes: 0,
+        sec: this.props.sec,
+        min: this.props.min,
+        // pause: false,
     }
 
     componentDidMount() {
@@ -54,19 +55,23 @@ export default class Task extends Component {
     }
 
     stopTimer = () => {
+        // this.setState({
+        //     pause: false,
+        // })
         clearInterval(this.timer)
     }
 
     countUp = () => {
-        const { seconds, minutes } = this.state
+        const { sec, min } = this.state
 
-        if (seconds === 60) {
-            this.setState({
-                seconds: 0,
-                minutes: minutes + 1,
-            })
+        if (sec || min) {
+            if (sec <= 0) {
+                this.setState({ sec: 59, min: min - 1 })
+            } else if (sec < 60) {
+                this.setState({ sec: sec - 1 })
+            }
         } else {
-            this.setState({ seconds: seconds + 1 })
+            clearInterval(this.timer)
         }
     }
 
@@ -106,7 +111,7 @@ export default class Task extends Component {
                             />
                             <span className="passedTime">
                                 {' '}
-                                min:{this.state.minutes} sec: {this.state.seconds}
+                                min:{this.state.min} sec: {this.state.sec}
                             </span>
                         </span>
 
