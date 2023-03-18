@@ -27,6 +27,36 @@ export default class App extends Component {
         })
     }
 
+    changeTimer = (id, min, sec) => {
+        this.setState(({ todoData }) => {
+            const idx = todoData.findIndex((el) => el.id === id)
+
+            const oldItem = todoData[idx]
+            // if (typeof oldItem === 'undefined') return
+            const newItem = { ...oldItem, min, sec }
+
+            const newArr = [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)]
+
+            // eslint-disable-next-line consistent-return
+            return { todoData: newArr }
+        })
+    }
+
+    // this.setState(({ todoData }) => {
+    //     const index = todoData.findIndex((el) => {
+    //       return el.id === id;
+    //     });
+
+    //     const oldItem = todoData[index];
+    //     if (typeof oldItem === 'undefined') return;
+    //     const newItem = { ...oldItem, timer: value };
+    //     const newArray = [...todoData.slice(0, index), newItem, ...todoData.slice(index + 1)];
+
+    //     return {
+    //       todoData: newArray,
+    //     };
+    //   });
+
     editTodoSubmit = (event, id) => {
         event.preventDefault()
         this.setState(({ todoData }) => {
@@ -137,6 +167,7 @@ export default class App extends Component {
                         onToggleCompleted={this.onToggleCompleted}
                         onEdit={this.editItem}
                         editTodoSubmit={this.editTodoSubmit}
+                        changeTimer={this.changeTimer}
                     />
                     <Footer
                         todoCount={uncompletedTask}

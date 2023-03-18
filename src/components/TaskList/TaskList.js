@@ -2,7 +2,7 @@ import './TaskList.css'
 import PropTypes from 'prop-types'
 import Task from '../Task'
 
-function TaskList({ todos, onDeleted, onToggleCompleted, onEdit, editTodoSubmit }) {
+function TaskList({ todos, onDeleted, onToggleCompleted, onEdit, editTodoSubmit, changeTimer }) {
     const elements = todos.map((item) => {
         const { id, ...itemProps } = item
         return (
@@ -17,6 +17,7 @@ function TaskList({ todos, onDeleted, onToggleCompleted, onEdit, editTodoSubmit 
                 onDeleted={() => onDeleted(id)}
                 onToggleCompleted={() => onToggleCompleted(id)}
                 onEdit={() => onEdit(id)}
+                changeTimer={(i, min, ces) => changeTimer(i, min, ces)}
             />
         )
     })

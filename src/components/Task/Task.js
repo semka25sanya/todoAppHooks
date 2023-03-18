@@ -24,10 +24,13 @@ export default class Task extends Component {
         currentTime: null,
         sec: this.props.sec,
         min: this.props.min,
-        // pause: false,
     }
 
     componentDidMount() {
+        this.setState({
+            sec: this.props.sec || 0,
+            min: this.props.min || 0,
+        })
         this.timerID = setInterval(() => {
             this.setState({
                 currentTime: formatDistanceToNow(this.props.data, {
@@ -39,6 +42,7 @@ export default class Task extends Component {
 
     componentWillUnmount() {
         clearInterval(this.timerID)
+        this.props.changeTimer(this.props.id, this.state.min, this.state.sec)
     }
 
     newStateEdit = (ev) => {
@@ -55,9 +59,6 @@ export default class Task extends Component {
     }
 
     stopTimer = () => {
-        // this.setState({
-        //     pause: false,
-        // })
         clearInterval(this.timer)
     }
 
