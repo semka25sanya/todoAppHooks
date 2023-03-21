@@ -32,7 +32,8 @@ export default class App extends Component {
             const idx = todoData.findIndex((el) => el.id === id)
 
             const oldItem = todoData[idx]
-            // if (typeof oldItem === 'undefined') return
+
+            if (typeof oldItem === 'undefined') return
             const newItem = { ...oldItem, min, sec }
 
             const newArr = [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)]
@@ -41,21 +42,6 @@ export default class App extends Component {
             return { todoData: newArr }
         })
     }
-
-    // this.setState(({ todoData }) => {
-    //     const index = todoData.findIndex((el) => {
-    //       return el.id === id;
-    //     });
-
-    //     const oldItem = todoData[index];
-    //     if (typeof oldItem === 'undefined') return;
-    //     const newItem = { ...oldItem, timer: value };
-    //     const newArray = [...todoData.slice(0, index), newItem, ...todoData.slice(index + 1)];
-
-    //     return {
-    //       todoData: newArray,
-    //     };
-    //   });
 
     editTodoSubmit = (event, id) => {
         event.preventDefault()
@@ -119,7 +105,6 @@ export default class App extends Component {
 
             const before = todoData.slice(0, idx)
             const after = todoData.slice(idx + 1)
-
             const newArr = [...before, ...after]
 
             return {

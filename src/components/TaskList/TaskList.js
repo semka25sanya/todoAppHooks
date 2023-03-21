@@ -9,8 +9,8 @@ function TaskList({ todos, onDeleted, onToggleCompleted, onEdit, editTodoSubmit,
             <Task
                 {...itemProps}
                 edit={item.edit}
-                id={id}
                 key={id}
+                id={id}
                 min={item.min}
                 sec={item.sec}
                 editTodoSubmit={(event) => editTodoSubmit(event, id)}

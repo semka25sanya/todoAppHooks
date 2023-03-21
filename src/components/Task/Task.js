@@ -41,8 +41,8 @@ export default class Task extends Component {
     }
 
     componentWillUnmount() {
-        clearInterval(this.timerID)
         this.props.changeTimer(this.props.id, this.state.min, this.state.sec)
+        clearInterval(this.timerID)
     }
 
     newStateEdit = (ev) => {
@@ -68,7 +68,7 @@ export default class Task extends Component {
         if (sec || min) {
             if (sec <= 0) {
                 this.setState({ sec: 59, min: min - 1 })
-            } else if (sec < 60) {
+            } else if (sec <= 60) {
                 this.setState({ sec: sec - 1 })
             }
         } else {
