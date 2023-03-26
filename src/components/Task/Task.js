@@ -1,132 +1,132 @@
-import { Component } from 'react'
+import { useState, useEffect } from 'react'
 import './Task.css'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+// import { setSeconds } from 'date-fns'
 
-export default class Task extends Component {
-    static defaultProps = {
-        editTodoSubmit: () => {},
-        onToggleCompleted: () => {},
-        onEdit: () => {},
-        onDeleted: () => {},
-    }
+export default function Task({
+    description,
+    onDeleted,
+    onToggleCompleted,
+    onEdit,
+    completed,
+    edit,
+    editTodoSubmit,
+    id,
+    min,
+    sec,
+    data,
+    changeTimer,
+}) {
+    const [value, setValue] = useState(description)
+    const [isPause, setIsPause] = useState(true)
+    const [currentTime, setCurrentTime] = useState([])
+    const [seconds, setSec] = useState(sec)
+    const [minutes, setMin] = useState(min)
 
-    static propTypes = {
-        editTodoSubmit: PropTypes.func,
-        onToggleCompleted: PropTypes.func,
-        onEdit: PropTypes.func,
-        onDeleted: PropTypes.func,
-    }
+    useEffect(() => {
+        if (sec === '') setSec(0)
+        if (min === '') setMin(0)
 
-    state = {
-        value: this.props.description,
-        currentTime: null,
-        sec: this.props.sec,
-        min: this.props.min,
-    }
-
-    componentDidMount() {
-        this.setState({
-            sec: this.props.sec || 0,
-            min: this.props.min || 0,
-        })
-        this.timerID = setInterval(() => {
-            this.setState({
-                currentTime: formatDistanceToNow(this.props.data, {
+        const timerID = setInterval(() => {
+            setCurrentTime({
+                currentTime: formatDistanceToNow(data, {
                     includeSeconds: true,
                 }),
             })
         }, 1000)
-    }
 
-    componentWillUnmount() {
-        this.props.changeTimer(this.props.id, this.state.min, this.state.sec)
-        clearInterval(this.timerID)
-    }
+        if (!isPause) {
+            const interval = setInterval(() => {
+                if (seconds === 0 && minutes !== 0) {
+                    setSec((s) => s + 59)
+                    setMin((m) => m - 1)
+                } else if (seconds === 0 && minutes === 0) {
+                    /* empty */
+                } else {
+                    setSec((s) => s - 1)
+                }
+            }, 1000)
 
-    newStateEdit = (ev) => {
-        this.setState(() => {
-            const newVal = ev.target.value
-            return {
-                value: newVal,
+            return () => {
+                clearInterval(interval)
+                changeTimer(id, minutes, seconds)
             }
-        })
-    }
-
-    startTimer = () => {
-        this.timer = setInterval(this.countUp, 1000)
-    }
-
-    stopTimer = () => {
-        clearInterval(this.timer)
-    }
-
-    countUp = () => {
-        const { sec, min } = this.state
-
-        if (sec || min) {
-            if (sec <= 0) {
-                this.setState({ sec: 59, min: min - 1 })
-            } else if (sec <= 60) {
-                this.setState({ sec: sec - 1 })
-            }
-        } else {
-            clearInterval(this.timer)
         }
+
+        return () => {
+            clearInterval(timerID)
+        }
+    }, [seconds, minutes, isPause])
+
+    const startTimer = () => {
+        setIsPause(false)
     }
 
-    render() {
-        const { description, onDeleted, onToggleCompleted, onEdit, completed, edit, editTodoSubmit, id } = this.props
+    const newStateEdit = (ev) => {
+        setValue(ev.target.value)
+    }
 
-        return edit ? (
-            <li className="editing">
-                <form onSubmit={editTodoSubmit}>
-                    <input
-                        autoFocus
-                        type="text"
-                        defaultValue={this.state.value}
-                        onChange={this.newStateEdit}
-                        className="edit"
-                    />
-                </form>
-            </li>
-        ) : (
-            <li className={classNames('todo-list-item', { ' completed': completed })}>
-                <div className="view">
-                    <input id={id} className="toggle" type="checkbox" onClick={onToggleCompleted} />
-                    <label htmlFor={id}>
-                        <span className="description">
-                            {description}
-                            <button
-                                aria-label="play-button"
-                                onClick={this.startTimer}
-                                type="button"
-                                className="icon icon-play"
-                            />
-                            <button
-                                aria-label="pause-button"
-                                type="button"
-                                onClick={this.stopTimer}
-                                className="icon icon-pause"
-                            />
-                            <span className="passedTime">
-                                {' '}
-                                min:{this.state.min} sec: {this.state.sec}
-                            </span>
+    const stopTimer = () => {
+        setIsPause(true)
+    }
+
+    return edit ? (
+        <li className="editing">
+            <form onSubmit={editTodoSubmit}>
+                <input autoFocus type="text" defaultValue={value} onChange={newStateEdit} className="edit" />
+            </form>
+        </li>
+    ) : (
+        <li className={classNames('todo-list-item', { ' completed': completed })}>
+            <div className="view">
+                <input id={id} className="toggle" type="checkbox" onClick={onToggleCompleted} />
+                <label htmlFor={id}>
+                    <span className="description">
+                        {description}
+                        <button
+                            aria-label="play-button"
+                            onClick={startTimer}
+                            type="button"
+                            className="icon icon-play"
+                        />
+                        <button
+                            aria-label="pause-button"
+                            type="button"
+                            onClick={stopTimer}
+                            className="icon icon-pause"
+                        />
+                        <span className="passedTime">
+                            {' '}
+                            min:{minutes} sec: {seconds}
                         </span>
+                    </span>
 
-                        <span className="created">created {this.state.currentTime} ago</span>
-                    </label>
-                    <button aria-label="edit-button" type="button" className="icon icon-edit" onClick={onEdit} />
-                    <button
-                        aria-label="destroy-button"
-                        type="button"
-                        className="icon icon-destroy"
-                        onClick={onDeleted}
-                    />
-                </div>
-            </li>
-        )
-    }
+                    <span className="created">created {currentTime.currentTime} ago</span>
+                </label>
+                <button aria-label="edit-button" type="button" className="icon icon-edit" onClick={onEdit} />
+                <button
+                    aria-label="destroy-button"
+                    type="button"
+                    className="icon icon-destroy"
+                    onClick={() => onDeleted(id)}
+                />
+            </div>
+        </li>
+    )
+}
+
+Task.defaultProps = {
+    editTodoSubmit: () => {},
+    onToggleCompleted: () => {},
+    onEdit: () => {},
+    onDeleted: () => {},
+}
+
+Task.propTypes = {
+    editTodoSubmit: PropTypes.func,
+    onToggleCompleted: PropTypes.func,
+    onEdit: PropTypes.func,
+    onDeleted: PropTypes.func,
 }

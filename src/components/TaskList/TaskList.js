@@ -13,6 +13,7 @@ function TaskList({ todos, onDeleted, onToggleCompleted, onEdit, editTodoSubmit,
                 id={id}
                 min={item.min}
                 sec={item.sec}
+                data={item.data}
                 editTodoSubmit={(event) => editTodoSubmit(event, id)}
                 onDeleted={() => onDeleted(id)}
                 onToggleCompleted={() => onToggleCompleted(id)}
