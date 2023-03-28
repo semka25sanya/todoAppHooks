@@ -13,40 +13,40 @@ export default function App() {
     const [filter, setFilter] = useState('all')
 
     const editItem = (id) => {
-        setTodoData(() => {
-            const idx = todoData.findIndex((el) => el.id === id)
-            const oldItem = todoData[idx]
+        setTodoData((arr) => {
+            const idx = arr.findIndex((el) => el.id === id)
+            const oldItem = arr[idx]
             const newItem = { ...oldItem, edit: !oldItem.edit }
 
-            return [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)]
+            return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)]
         })
     }
 
     const changeTimer = (id, min, sec) => {
-        setTodoData(() => {
-            const idx = todoData.findIndex((el) => el.id === id)
+        setTodoData((arr) => {
+            const idx = arr.findIndex((el) => el.id === id)
 
-            const oldItem = todoData[idx]
+            const oldItem = arr[idx]
 
             if (typeof oldItem === 'undefined') return
             const newItem = { ...oldItem, min, sec }
 
             // eslint-disable-next-line consistent-return
-            return [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)]
+            return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)]
         })
     }
 
     const editTodoSubmit = (event, id) => {
         event.preventDefault()
-        setTodoData(() => {
-            const index = todoData.findIndex((data) => data.id === id)
-            const oldData = todoData[index]
+        setTodoData((arr) => {
+            const index = arr.findIndex((data) => data.id === id)
+            const oldData = arr[index]
             const newData = {
                 ...oldData,
                 edit: !oldData.edit,
                 description: event.target.querySelector('input').value,
             }
-            return [...todoData.slice(0, index), newData, ...todoData.slice(index + 1)]
+            return [...arr.slice(0, index), newData, ...arr.slice(index + 1)]
         })
     }
 
@@ -55,13 +55,13 @@ export default function App() {
     }
 
     const onToggleCompleted = (id) => {
-        setTodoData(() => {
-            const idx = todoData.findIndex((el) => el.id === id)
+        setTodoData((arr) => {
+            const idx = arr.findIndex((el) => el.id === id)
 
-            const oldItem = todoData[idx]
+            const oldItem = arr[idx]
             const newItem = { ...oldItem, completed: !oldItem.completed }
 
-            return [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)]
+            return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)]
         })
     }
 
